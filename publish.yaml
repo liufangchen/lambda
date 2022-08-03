@@ -1,10 +1,10 @@
 Type: Component
-Name: liufangchen/lambda
+Name: lambda
 Provider:
   - AWS
 Version: 0.0.1
 Description: Lambda Component For Serverless Devs
-HomePage: https://github.com/Serverless-Devs-Awesome/lambda-aws-component
+HomePage: https://github.com/liufangchen/lambda
 Tags:
   - AWS Lambda
   - 函数计算

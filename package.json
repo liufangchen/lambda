@@ -16,13 +16,16 @@
     "Framework",
     "Serverless-Devs",
     "Serverless-Tool",
-    "Function Compute"
+    "Lambda"
   ],
   "scripts": {
+    "publish": "npm install",
     "start": "npm run watch",
     "watch": "tsc -w",
     "prebuild": "rimraf package-lock.json && rimraf dist && rimraf node_modules && npm i",
-    "build": "esbuild src/index.ts --bundle --log-level=error --minify --platform=node --format=cjs --target=node10.4 --external:@serverless-devs/core --outfile=dist/index.js"
+    "build": "esbuild src/index.ts --bundle --log-level=error --minify --platform=node --format=cjs --target=node10.4 --external:@serverless-devs/core --outfile=dist/index.js",
+    "rmsrc": "rm -rf src/*",
+    "typecheck": "npx tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.137.0",

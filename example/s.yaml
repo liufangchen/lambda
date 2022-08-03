@@ -5,7 +5,7 @@ access: aws-access
 
 services:
   lambda-test:
-    component: ${path(..)} 
+    component: liufangchen/lambda
     props:                
       region: us-west-2
       function:

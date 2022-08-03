@@ -1,4 +1,6 @@
 node_modules
 .s
+note.txt
+/dist
 
 package-lock.json

@@ -1,34 +1,292 @@
-# 规范文档参考:
-# 中文：https://github.com/Serverless-Devs/Serverless-Devs/blob/master/spec/zh/0.0.2/serverless_package_model/3.package_model.md#组件模型规范
-# English: https://github.com/Serverless-Devs/Serverless-Devs/blob/master/spec/en/0.0.2/serverless_package_model/3.package_model.md#Component-model-specification
-# --------------
-# Package 开发发布最佳实践:
-#   - [社区讨论 #62](https://github.com/Serverless-Devs/Serverless-Devs/discussions/62);
-#   - [社区讨论 #407](https://github.com/Serverless-Devs/Serverless-Devs/discussions/407);
-#   - [社区讨论 #439](https://github.com/Serverless-Devs/Serverless-Devs/discussions/439);
-
 Type: Component
-Name: 名称
+Name: liufangchen/lambda
 Provider:
-  - 云厂商名称 
-Version: 版本，例如0.0.1
-Description: 简短的描述/介绍
-HomePage: 项目首页地址
-Tags: #标签详情
-  - 部署函数
-  - 部署组件
-Category: 分类 # 基础云服务/Web框架/Web应用/人工智能/音视频处理/图文处理/监控告警/大数据/IoT/新手入门/其他
-Service: # 使用的服务
-  服务名:  # 函数计算/容器服务/镜像服务/消息队列/工作流/CDN/对象存储/表格存储/MNS/日志服务/API网关/数据库/解析服务/云应用/其他
-    # Runtime: Python 3.6 如果服务是函数，还需要增加Runtime
-    Authorities: #权限描述
-      - 创建函数 # 所需要的权限
-Commands: # 指令，格式为指令：指令描述，例如：
-  deploy: 部署函数
-  invoke: 调用函数
+  - AWS
+Version: 0.0.1
+Description: Lambda Component For Serverless Devs
+HomePage: https://github.com/Serverless-Devs-Awesome/lambda-aws-component
+Tags:
+  - AWS Lambda
+  - 函数计算
+  - AWS
+  - Lambda
+Category: 基础云服务
+Commands:
+  Build & Deploy:
+    deploy: Deploy local resources online
+    build: Build the dependencies.
+    remove: The ability to delete resources
+  Observability:
+    metrics: Query function metrics information
+    logs: Query the function log. You need to open SLS log service
+  Invoke & Debug:
+    local: Run your serverless application locally for quick development & testing
+    invoke: Invoke/Trigger online functions
+    proxied: Local invoke via proxied service.
+    remote: Remote invoke via proxied service.
+  Publish & Config:
+    version: Service version operation
+    alias: Service alias operation
+    provision: provision reservation operation
+    ondemand: Resource on-demand operation
+    layer: Resource layer operation
+  Others:
+    nas: Manage nas, include upload,download and so on
+    plan: Perceived resource change
+    info: Query online resource details
+    sync: Synchronize online resources to offline resources
+    stress: Stress test for the serverless application
+    fun2s: Convert the Yaml specification of Funcraft to Serverless Devs
+    instance: Instance login and operation [beta]
+    api: API call directly [beta]
 Properties:
-  Region: # 参数
-    Description: 参数描述
-    Required: true # 参数必选，true/false
-    Type: # 参数类型
-      - String
+  type: object
+  required:
+    - region
+    - function
+  additionalProperties: false
+  properties:
+    region:
+      title: region
+      description: The region of function
+      enum:
+        - us-east-2
+        - us-east-1
+        - us-west-1
+        - us-west-2
+        - af-south-1
+        - ap-east-1
+        - ap-southeast-3
+        - ap-south-1
+        - ap-northeast-3
+        - ap-northeast-2
+        - ap-southeast-1
+        - ap-southeast-2
+        - ap-northeast-1
+        - ca-central-1
+        - cn-north-1
+        - cn-northwest-1
+        - eu-central-1
+        - eu-west-1
+        - eu-west-2
+        - eu-south-1
+        - eu-west-3
+        - eu-north-1
+        - me-south-1
+        - sa-east-1
+    function:
+      type: object
+      title: 函数配置
+      description: The config of function
+      additionalProperties: false
+      required:
+        - codeUri
+        - name
+        - handler
+        # - role
+      properties:
+        architectures:
+          title: 指令集架构
+          description: Instruction set architecture supported by function
+          default: x86_64
+          enum:
+            - x86_64
+            - arm64
+        codeUri:
+          title: 代码配置
+          description: The code for the function
+          # TODO: support ImageUri/S3Bucket
+          type: string
+        deadLetterConfig:
+          title: 死信队列
+          description: A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing.
+          type: object
+          additionalProperties: false
+          properties:
+            targetArn:
+              title: 资源ARN
+              description: The Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic
+              type: string
+        description:
+          title: 描述
+          description: The description of the Lambda function
+          type: string
+        environment:
+          title: 环境变量
+          description: The function's environment variables
+          type: object
+          additionalProperties: false
+          properties:
+            variables:
+              title: 键值对
+              description: Environment variable key-value pairs
+              x-component: KeyValue
+        name:
+          title: 函数名称
+          description: The name of the Lambda function
+          type: string
+        ephemeralStorage:
+          title: tmp目录的大小
+          description: The size (in MB) of the /tmp directory of the function. The original setting value is 512, but it can be any integer between 512 and 10240MB.
+          minimum: 512
+          maximum: 10240
+          default: 512
+          type: integer
+        fileSystemConfigs:
+          title: 文件系统
+          description: Connection settings for Amazon EFS file system
+          type: object
+          additionalProperties: false
+          properties:
+            arn:
+              title: 访问点ARN
+              description: Amazon resource name (ARN) of the Amazon EFS access point that provides access to the file system
+              type: string
+            localMountPath:
+              title: 函数路径
+              description: Function is used to access the path of the file system, starting with /mnt/
+              type: string
+        handler:
+          title: 函数入口
+          description: ''
+          type: string
+        layers:
+          title: 层配置
+          description: List of function layers to be added to the function execution environment. Specify each layer through ARN, including version.
+          type: array
+          uniqueItems: true
+          items:
+            oneOf:
+              - type: string
+        memorySize:
+          title: 运行内存
+          description: The amount of memory available to the function at run time. Increasing the memory of this function will also increase its CPU allocation. The default value is 128 MB. This value can be any multiple of 1 MB.
+          type: integer
+          minimum: 128
+          maximum: 10240
+          default: 128
+        role:
+          title: 执行角色
+          description: Amazon resource name (ARN) of the execution role of the function
+          type: string
+        runtime:
+          title: 运行时
+          description: Identifier of the runtime of the function. If the deployment package is a.Zip file archive, you need to use the runtime
+          enum:
+            # - nodejs4.3
+            - nodejs6.10
+            - nodejs8.10
+            - nodejs10.x
+            - nodejs12.x
+            - nodejs14.x
+            - nodejs16.x
+            - java8
+            - java8.al2
+            - java11
+            - python2.7
+            - python3.6
+            - python3.7
+            - python3.8
+            - python3.9
+            - dotnetcore1.0
+            - dotnetcore2.0
+            - dotnetcore2.1
+            - dotnetcore3.1
+            - dotnet6
+            - nodejs4.3-edge
+            - go1.x
+            - ruby2.5
+            - ruby2.7
+            - provided
+            - provided.al2
+        tags:
+          title: 标签配置
+          description: A list of tags to apply to the function.
+          x-component: KeyValue
+        timeout:
+          title: 运行时长
+          description: The length of time (in seconds) that lambda allows a function to run before stopping it. The default value is 3 seconds. The maximum allowed value is 900 seconds
+          type: integer
+          minimum: 1
+          maximum: 900
+          default: 3
+        tracingConfig:
+          title: 链路跟踪
+          description: ''
+          type: object
+          additionalProperties: false
+          properties:
+            mode:
+              title: 跟踪模式
+              enum:
+                - Active
+                - PassThrough
+        vpcConfig:
+          title: 网络连接
+          description: ''
+          type: object
+          additionalProperties: false
+          properties:
+            securityGroupIds:
+              title: 安全组 ID
+              type: array
+              uniqueItems: true
+              items:
+                oneOf:
+                  - type: string
+            subnetIds:
+              title: 子网 ID
+              type: array
+              uniqueItems: true
+              items:
+                oneOf:
+                  - type: string
+    events:
+      type: array
+      title: 触发事件配置
+      description: The events of function
+      uniqueItems: true
+      items:
+        oneOf:
+          - type: object
+            required:
+              - type
+              - name
+              - properties
+            properties:
+              name:
+                title: 触发事件名称
+                type: string
+              type:
+                title: 触发事件类型
+                default: Api
+                enum:
+                  - Api
+              properties:
+                title: 事件属性
+                type: object
+                required:
+                  - path
+                  - method
+                properties:
+                  path:
+                    title: 事件路径
+                    type: string
+                    description: The path of apigateway event
+                  method:
+                    title: 调用方式
+                    description: The Method of apigateway event
+                    enum:
+                      - ANY
+                      - GET
+                      - POST
+                      - DELETE
+                      - PUT
+                  timeoutInMillis:
+                    title: 时间单位
+                    type: string
+                    description: The TimeoutInMillis of apigateway event
+                  payloadFormatVersion:
+                    title: 有效负载格式版本
+                    type: string
+                    description: The PayloadFormatVersion of apigateway event

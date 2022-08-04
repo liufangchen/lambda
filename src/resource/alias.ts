@@ -66,7 +66,7 @@ export default class Alias {
     async deploy(props) {
       logger.info(`Deploy alias: ${props.Name} of ${props.FunctionName}`);
       try{
-        return await Client.getInstance().createAlias(props);
+        return await new Client().createAlias(props);
       }catch(err){
         logger.error(err);
         // try again
@@ -76,7 +76,7 @@ export default class Alias {
     async remove(props) {
       logger.info(`Removing alias: ${props.Name} of ${props.FunctionName}`);
       try{
-        return await Client.getInstance().deleteAlias(props);
+        return await new Client().deleteAlias(props);
       }catch(err){
           logger.error(err);
           // try again
@@ -85,7 +85,7 @@ export default class Alias {
 
     async get(props) {
       try{
-          await Client.getInstance().getAlias(props);
+          await new Client().getAlias(props);
       }catch(err){
           logger.error(err);
           // try again

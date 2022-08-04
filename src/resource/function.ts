@@ -7,15 +7,16 @@ export default class Function {
     async deploy(props) {
         try{
           // 1. Pack Code
-          return (await Client.getInstance().createFunction(props));
-        }catch(err){
-            logger.error(err);
+          return (await new Client().createFunction(props));// with code
+        }catch(error){
+            const { requestId, cfId, extendedRequestId } = error.$$metadata;
+            logger.error({ requestId, cfId, extendedRequestId });
         }
     }
 
     async remove(functionName) {
         logger.log(`Removing Function ${functionName}`);
-        return (await Client.getInstance().deleteFunction({ FunctionName: functionName }));
+        return (await new Client().deleteFunction({ FunctionName: functionName }));
     }
 
     async build(props) {
@@ -23,7 +24,7 @@ export default class Function {
     }
 
     async get(functionName: any){
-        const { LastUpdateStatus } = await Client.getInstance().getFunctionConfiguration({ FunctionName: functionName });
+        const { LastUpdateStatus } = await new Client().getFunctionConfiguration({ FunctionName: functionName });
         logger.log(LastUpdateStatus);
     }
 

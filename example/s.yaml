@@ -5,9 +5,9 @@ access: aws-access
 
 services:
   lambda-test:
-    component: liufangchen/lambda
+    component: lambda
     props:                
-      region: us-west-2
+      region: us-west-2 # aws available region
       function:
         Handler: index.handler
         Runtime: python3.6

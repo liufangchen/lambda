@@ -74,9 +74,10 @@ export default class Deploy {
     logger.info(`Start the ${this.Command} of ${props.FunctionName} (Function)`);
     try {
       let result = await new Function().deploy(props);
-      logger.info(`End the ${this.Command} and ${props.FunctionName} (Function) deployed successfully ! (${result.$metadata.httpStatusCode as number})`);
+      console.log(result);
+      logger.info(`End the ${this.Command} and ${props.FunctionName} (Function) deployed successfully !`);
     } catch (error) {
-      logger.error(`Fail the ${this.Command}: ${error} }`);
+      logger.error(`Fail the ${this.Command}: ${error}`);
       return;
     }
   }
@@ -84,11 +85,11 @@ export default class Deploy {
   async deployAlias(props) {
     logger.info(`Start the ${this.Command} of ${props.Name} (Alias)`);
     try {
-      let result = await new Alias().deploy(props);
-      logger.info(`End the ${this.Command} and ${props.Name} (Alias) deployed successfully ! (${result.$metadata.httpStatusCode as number})`);
+      await new Alias().deploy(props);
+      logger.info(`End the ${this.Command} and ${props.Name} (Alias) deployed successfully ! `);
     } catch (error) {
       //const { requestId, cfId, extendedRequestId } = error.$$metadata;
-      logger.error(`Fail the ${this.Command}: ${error} }`);
+      logger.error(`Fail the ${this.Command}: ${error}`);
       return;
     }
   }

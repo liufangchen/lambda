@@ -2,7 +2,7 @@ Type: Component
 Name: lambda
 Provider:
   - AWS
-Version: 0.0.4
+Version: 0.0.5
 Description: Lambda Component For Serverless Devs
 HomePage: https://github.com/liufangchen/lambda
 Tags:

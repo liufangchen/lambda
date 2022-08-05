@@ -28,9 +28,12 @@
     "typecheck": "npx tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@aws-sdk/client-iam": "^3.142.0",
     "@aws-sdk/client-lambda": "^3.137.0",
     "@serverless-devs/core": "^0.1.44",
-    "@serverless-devs/s-zip": "^0.0.8"
+    "@serverless-devs/s-zip": "^0.0.8",
+    "async-retry.ts": "^1.2.0",
+    "retry": "^0.13.1"
   },
   "devDependencies": {
     "@types/node": "^14.0.23",

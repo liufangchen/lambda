@@ -8,6 +8,7 @@ import Function from '../resource/function'
 export default class Remove {
 
   Command: string = "Remove";
+  Config:any;
 
   static async handlerInputs(inputs) {
     logger.debug(`inputs.props: ${JSON.stringify(inputs.props)}`);
@@ -15,7 +16,6 @@ export default class Remove {
       boolean: ['help'],
       alias: { help: 'h' },
     });
-
     const parsedData = parsedArgs?.data || {};
     const rawData = parsedData._ || [];
     const subCommand = rawData[0] || 'all';
@@ -29,7 +29,6 @@ export default class Remove {
         : core.help(HELP.REMOVE);
       return { help: true, subCommand };
     }
-
     const props = inputs.props || {};
     // region
     const { region } = props;
@@ -80,7 +79,7 @@ export default class Remove {
       let result = await new Function().remove(props);
       logger.info(`End the ${this.Command} and ${props.FunctionName} (Function) removed successfully ! (${result.$metadata.httpStatusCode as number})`);
     } catch (error) {
-      logger.error(`Fail the ${this.Command}: ${error} }`);
+      logger.error(`Fail the ${this.Command}: ${error} `);
       return;
     }
   }

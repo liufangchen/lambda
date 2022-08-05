@@ -6,16 +6,16 @@ import logger from '../common/logger';
 
 export default class Alias {
   async deploy(props) {
-      return await new Client().createAlias(props);
+      return await Client.lambda().createAlias(props);
   }
 
   async remove(props) {
-      return await new Client().deleteAlias(props);
+      return await Client.lambda().deleteAlias(props);
   }
 
   async get(props) {
     try{
-        await new Client().getAlias(props);
+        await Client.lambda().getAlias(props);
     }catch(err){
         logger.error(err);
         // try again

@@ -3,6 +3,7 @@ import logger from './common/logger';
 import { InputProps } from './common/entity';
 import Remove from './command/remove';
 import Deploy from './command/deploy';
+
 const { colors } = core;
 
 export default class lambda {
@@ -20,7 +21,7 @@ export default class lambda {
   }
 
   public async test(inputs: InputProps): Promise<any> {
-
+    
   }
 
   public async alias(inputs: InputProps) {

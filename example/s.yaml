@@ -1,23 +1,22 @@
-# SAM ：https://docs.aws.amazon.com/zh_cn/serverless-application-model/latest/developerguide/sam-resource-function.html
 edition: 1.0.0 
 name: example
 access: aws-access
 
+vars:
+  region: us-west-2 # aws available
+  Role: arn:aws:iam::526056492340:role/TestRole
+
 services:
   lambda-test1:
-    component: lambda
+    component: lambda #${path(..)} 
     props:                
-      region: us-west-2 # aws available
+      region: ${vars.region}
       function:
         Code: ./code
-        FunctionName: aws-lambda-demo
+        FunctionName: start-golang-a #aws-lambda-demo 
         Handler: index.handler
         Runtime: nodejs16.x
         # if role isn't specified, one is created for you
-        # Role: arn:aws:iam::526056492340:role/TestRole
+        Role: ${vars.Role}
         Description: Hello world function created by serverless devs
-      alias: 
-        FunctionName: CsharpTest
-        Name: alisa1
-        Description: LALALAL
-        FunctionVersion: $LATEST
+# SAM ：https://docs.aws.amazon.com/zh_cn/serverless-application-model/latest/developerguide/sam-resource-function.html

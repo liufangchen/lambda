@@ -5,9 +5,9 @@ import * as HELP from '../help/deploy';
 import Alias from '../resource/alias'
 import Function from '../resource/function'
 
-export default class Deploy {
+const Command: string = "Deploy";
 
-  Command: string = "Deploy";
+export default class Deploy {
 
   static async handlerInputs(inputs) {
     logger.debug(`inputs.props: ${JSON.stringify(inputs.props)}`);
@@ -71,25 +71,29 @@ export default class Deploy {
   }
 
   async deployFunction(props) {
-    logger.info(`Start the ${this.Command} of ${props.FunctionName} (Function)`);
+    logger.info(`Start the ${Command} of ${props.FunctionName} (Function)`);
     try {
       let result = await new Function().deploy(props);
-      console.log(result);
-      logger.info(`End the ${this.Command} and ${props.FunctionName} (Function) deployed successfully !`);
+      if(result === true){
+        logger.info(`End the ${Command} and ${props.FunctionName} (Function) deployed successfully !`);
+      }else{
+        logger.error(`Fail the ${Command}`);
+      }
+      return;
     } catch (error) {
-      logger.error(`Fail the ${this.Command}: ${error}`);
+      logger.error(`Fail the ${Command}: ${error}`);
       return;
     }
   }
 
   async deployAlias(props) {
-    logger.info(`Start the ${this.Command} of ${props.Name} (Alias)`);
+    logger.info(`Start the ${Command} of ${props.Name} (Alias)`);
     try {
       await new Alias().deploy(props);
-      logger.info(`End the ${this.Command} and ${props.Name} (Alias) deployed successfully ! `);
+      logger.info(`End the ${Command} and ${props.Name} (Alias) deployed successfully ! `);
     } catch (error) {
       //const { requestId, cfId, extendedRequestId } = error.$$metadata;
-      logger.error(`Fail the ${this.Command}: ${error}`);
+      logger.error(`Fail the ${Command}: ${error}`);
       return;
     }
   }

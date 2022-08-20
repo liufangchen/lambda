@@ -3,6 +3,7 @@ import logger from './common/logger';
 import { InputProps } from './common/entity';
 import Remove from './command/remove';
 import Deploy from './command/deploy';
+import Client from './common/client';
 
 const { colors } = core;
 
@@ -21,9 +22,24 @@ export default class lambda {
   }
 
   public async test(inputs: InputProps): Promise<any> {
-    
-  }
+    const { region} = inputs.props;
+    Client.REGION = region;
+    const credentials = await core.getCredential(inputs.project.access);
+    Client.CREDENTIALS = credentials;
 
+    let result;
+    try{
+      result = await Client.lambda().getFunction(inputs.props.function);
+    }catch(error){
+      const { httpStatusCode } = error.$metadata;
+      if (httpStatusCode ===404){
+        console.log("No Resource ")
+      }
+      console.log(error)
+    }
+    console.log(result)
+  }
+  
   public async alias(inputs: InputProps) {
     logger.log(`🚀 The ${inputs.command} of lambda coming soon...\n`);
     logger.log(`👉 Follow the latest progress: ` + colors.cyan.underline(`https://github.com/liufangchen/lambda/wiki/${inputs.command}`));
